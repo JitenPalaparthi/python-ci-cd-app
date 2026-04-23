@@ -1,0 +1,25 @@
+from fastapi.testclient import TestClient
+
+from app.main import app
+
+client = TestClient(app)
+
+
+def test_root() -> None:
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Hello from Python CI/CD demo"}
+
+
+
+def test_health() -> None:
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json() == {"status": "ok"}
+
+
+
+def test_echo() -> None:
+    response = client.post("/echo", json={"message": "hello"})
+    assert response.status_code == 200
+    assert response.json() == {"echo": "hello"}
